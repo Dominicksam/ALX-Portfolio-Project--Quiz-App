@@ -5,17 +5,146 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home - QuizApp</title>
     <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
 </head>
 <body>
-    <div class="container">
-        <h2>QuizApp</h2>
-        <p>Welcome, {{request.user.username}}!</p>
-        <a href="{% url 'protected' %}">Go to protected Page!</a>
-        <form action="{% url 'logout' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <h2 class="logo">QuizApp</h2>
+            <div class="user-info">
+                <p>Welcome, {{ request.user.username }}!</p>
+                <a href="{% url 'protected' %}" class="protected-link">Protected Page</a>
+                <form action="{% url 'logout' %}" method="POST" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+
+    <!-- Main Content Container -->
+    <div>
+        <h1>Available Quizzes</h1>
+        
+        <!-- Filter by Category -->
+        <div class="quiz-filter">
+            <form method="get" class="filter-form">
+                <label for="category-select">Filter by Category:</label>
+                <select name="category" id="category-select" class="category-dropdown">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id|stringformat:"s" == request.GET.category %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-filter">Filter</button>
+            </form>
+        </div>
+
+        <!-- Display Questions with Options -->
+        <div class="quiz-questions">
+            {% if questions %}
+            <form method="POST" action="{% url 'quiz' request.GET.category %}">
+                {% csrf_token %}
+                <h2>Questions</h2>
+                {% for question in questions %}
+                    <div class="question">
+                        <p><strong>{{ question.question_text }}</strong></p>
+                        <div class="options">
+                            <label>
+                                <input type="radio" name="{{ question.id }}" value="{{ question.option1 }}">
+                                {{ question.option1 }}
+                            </label><br>
+                            <label>
+                                <input type="radio" name="{{ question.id }}" value="{{ question.option2 }}">
+                                {{ question.option2 }}
+                            </label><br>
+                            <label>
+                                <input type="radio" name="{{ question.id }}" value="{{ question.option3 }}">
+                                {{ question.option3 }}
+                            </label><br>
+                            <label>
+                                <input type="radio" name="{{ question.id }}" value="{{ question.option4 }}">
+                                {{ question.option4 }}
+                            </label>
+                        </div>
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn-submit">Submit Quiz</button>
+            </form>
+            {% else %}
+                <p>No questions available for this category.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-bar {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info p {
+            margin-right: 20px;
+        }
+
+        .protected-link {
+            margin-right: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-logout {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: #d32f2f;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-filter {
+            margin
+        }
