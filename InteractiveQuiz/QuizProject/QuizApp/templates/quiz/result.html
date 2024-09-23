@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Result - QuizApp</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .result-summary {
+            margin-bottom: 20px;
+        }
+        .review-questions {
+            margin-top: 20px;
+        }
+        .btn-back {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Result</h1>
+        
+        <div class="result-summary">
+            <h2>Results for: {{ quiz.name }}</h2>
+            <p>You scored <strong>{{ score }}</strong> out of <strong>{{ questions.count }}</strong>.</p>
+            
+            {% if score == questions.count %}
+                <p>Excellent! You got all answers correct!</p>
+            {% else %}
+                {% widthratio score questions.count 2 as half_score %}
+                {% if score >= half_score %}
+                    <p>Good job! You passed the quiz!</p>
+                {% else %}
+                    <p>Keep trying! Review the material and take the quiz again!</p>
+                {% endif %}
+            {% endif %}
+        </div>
+        
+        <div class="review-questions">
+            <h3>Your Answers:</h3>
+            <ul>
+                {% for question in questions %}
+                    <li>
+                        <p><strong>{{ question.text }}</strong></p>
+                        <p>Your answer: 
+                            <strong>
+                                {% for choice in question.choices.all %}
+                                    {% if choice.id|stringformat:"s" == user_answers|get:question.id %}
+                                        {{ choice.text }}
+                                    {% endif %}
+                                {% endfor %}
+                            </strong>
+                        </p>
+                        <p>Correct answer: <strong>{{ question.correct_option }}</strong></p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <a href="{% url 'home' %}" class="btn-back">Back to Home</a>
+    </div>
+</body>
+</html>

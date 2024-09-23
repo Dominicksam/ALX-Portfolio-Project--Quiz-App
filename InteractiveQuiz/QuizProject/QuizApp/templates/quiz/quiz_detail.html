@@ -1,35 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ quiz.category.name }} Quiz</title>
-</head>
-<body>
-    <h1>{{ quiz.category.name }} Quiz</h1>
+<h1>{{ quiz.name }}</h1>
 
-    <form method="POST">
-        {% csrf_token %}
-        {% for question in questions %}
-            <div>
-                <p>{{ question.question_text }}</p>
-                <label>
-                    <input type="radio" name="{{ question.id }}" value="option1">
-                    {{ question.option1 }}
-                </label>
-                <label>
-                    <input type="radio" name="{{ question.id }}" value="option2">
-                    {{ question.option2 }}
-                </label>
-                <label>
-                    <input type="radio" name="{{ question.id }}" value="option3">
-                    {{ question.option3 }}
-                </label>
-                <label>
-                    <input type="radio" name="{{ question.id }}" value="option4">
-                    {{ question.option4 }}
-                </label>
-            </div>
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>
+<!-- Display quiz details -->
+<div>
+    <h3>Category: {{ quiz.category.name }}</h3>
+    <p>Topic: {{ quiz.topic }}</p>
+    <p>Number of Questions: {{ quiz.number_of_questions }}</p>
+    <p>Time Limit: {{ quiz.time }} minutes</p>
+    <p>Difficulty: {{ quiz.difficulty|title }}</p>
+    <p>Required Score to Pass: {{ quiz.required_score_to_pass }}%</p>
+</div>
+
+<!-- Button to start the quiz -->
+<a href="{% url 'quiz_start' quiz.id %}" class="btn btn-primary">Start Quiz</a>
+
+<hr>
+
+<!-- Related quizzes or other quizzes in the same category -->
+<h2>Other Quizzes in {{ quiz.category.name }}</h2>
+<ul>
+    {% for related_quiz in related_quizzes %}
+        <li><a href="{% url 'quiz_detail' related_quiz.id %}">{{ related_quiz.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'add_quiz' %}" class="btn btn-secondary">Add a New Quiz</a>

@@ -1,0 +1,67 @@
+
+{% load static %}
+<!doctile html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        home
+        {% endblock title %}
+    </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'quizes/style.css' %}">
+    
+</head>
+{% block script %}
+    <script src="{% static 'quizes/main.js' %}" defer></script> 
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+{% endblock script %}
+
+{% block content %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="quizStartModal" tabindex="-1" aria-labelledby="quizStartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Start Qiuz</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body-confirm"></div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <button type="button" id="start-button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="h1">Quiz List</div>
+<hr>
+{% for obj in object_list %}
+    <button
+        class="btn btn-link modal-button"
+        data-pk="{{ obj.pk }}"
+        data-quiz="{{ obj.name }}"
+        data-question="{{ obj.number_of_questions }}"
+        data-time="{{ obj.time }}"
+        data-difficulty="{{ obj.difficulty }}"
+        data-pass="{{ obj.required_score_to_pass }}"
+        data-bs-toggle="modal"
+        data-bs-target="#quizStartModal">
+        {{ obj.name }}
+    </button>
+    
+{% endfor %}
+
+{% endblock content %}
+
+<!-- Bootstrap 5 JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+

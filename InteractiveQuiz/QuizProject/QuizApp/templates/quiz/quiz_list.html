@@ -1,18 +1,29 @@
-<h1>Quizzes</h1>
-<ul>
-{% for quiz in quizzes %}
-    <li><a href="{% url 'quiz_detail' quiz.id %}">{{ quiz.name }}</a></li>
-{% endfor %}
-</ul>
-<a href="{% url 'add_quiz' %}">Add a new quiz</a>
+<h1>Available Quizzes</h1>
 
-<h1>Quizzes</h1>
+<!-- Filter by category -->
 <form method="get">
     <select name="category">
         <option value="">All Categories</option>
-            {% for category in categories %}
-        <option value="{{ category.name }}">{{ category.name }}</option>
-            {% endfor %}
+        {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
     </select>
-    <button type="submit">Filter</button>
+    <button type="submit">Take Qu</button>
 </form>
+
+<!-- Display quizzes based on selected category -->
+<ul>
+    {% if quizzes %}
+        {% for quiz in quizzes %}
+            <li>
+                <a href="{% url 'quiz_view' quiz.id %}">{{ quiz.name }}</a> 
+                ({{ quiz.number_of_questions }} Questions, {{ quiz.difficulty|title }} Difficulty)
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>No quizzes available for this category.</li>
+    {% endif %}
+</ul>
+
+<!-- Link to add a new quiz -->
+<a href="{% url 'add_quiz' %}">Add a new quiz</a>
