@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Question, Quiz, Choice
+from .models import Question, Quiz
 
 # Registration form for new users
 class RegisterForm(forms.ModelForm):
@@ -45,15 +45,18 @@ class QuizForm(forms.ModelForm):
         ]
 
 
-# Form to create and update questions
+# Form to create and update questions, including options
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['category', 'quiz', 'text']
+        fields = [
+            'category', 
+            'quiz', 
+            'text', 
+            'option1', 
+            'option2', 
+            'option3', 
+            'option4', 
+            'correct_option'  
+        ]
 
-
-# Form to add and update choices for a question
-class ChoiceForm(forms.ModelForm):
-    class Meta:
-        model = Choice
-        fields = ['text', 'is_correct']

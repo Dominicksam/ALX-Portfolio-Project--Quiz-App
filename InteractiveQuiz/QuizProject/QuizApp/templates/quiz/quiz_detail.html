@@ -1,26 +1,31 @@
-<h1>{{ quiz.name }}</h1>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ quiz.name }} - Quiz Details</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="quiz-detail-container">
+        <h1>Details for {{ quiz.name }}</h1>
+        <p>Category: {{ quiz.category.name }}</p>
+        <p>Number of Questions: {{ quiz.number_of_questions }}</p>
+        <p>Time Limit: {{ quiz.time }} minutes</p>
+        <p>Difficulty: {{ quiz.difficulty|title }}</p>
 
-<!-- Display quiz details -->
-<div>
-    <h3>Category: {{ quiz.category.name }}</h3>
-    <p>Topic: {{ quiz.topic }}</p>
-    <p>Number of Questions: {{ quiz.number_of_questions }}</p>
-    <p>Time Limit: {{ quiz.time }} minutes</p>
-    <p>Difficulty: {{ quiz.difficulty|title }}</p>
-    <p>Required Score to Pass: {{ quiz.required_score_to_pass }}%</p>
-</div>
+        <h2>Questions:</h2>
+        <ul>
+            {% for question in questions %}
+                <li>{{ question.text }}</li>
+            {% empty %}
+                <li>No questions available for this quiz.</li>
+            {% endfor %}
+        </ul>
 
-<!-- Button to start the quiz -->
-<a href="{% url 'quiz_start' quiz.id %}" class="btn btn-primary">Start Quiz</a>
-
-<hr>
-
-<!-- Related quizzes or other quizzes in the same category -->
-<h2>Other Quizzes in {{ quiz.category.name }}</h2>
-<ul>
-    {% for related_quiz in related_quizzes %}
-        <li><a href="{% url 'quiz_detail' related_quiz.id %}">{{ related_quiz.name }}</a></li>
-    {% endfor %}
-</ul>
-
-<a href="{% url 'add_quiz' %}" class="btn btn-secondary">Add a New Quiz</a>
+        <a href="{% url 'add_question' quiz.id %}">Add Question</a>
+        <a href="{% url 'quiz_list' %}">Back to Quiz List</a>
+    </div>
+</body>
+</html>

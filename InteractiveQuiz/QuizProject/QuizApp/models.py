@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 DIFF_CHOICES = (
     ('easy', 'Easy'),
     ('medium', 'Medium'),
-    ('hard', 'Hard'),
+    ('hard', 'Hard'), 
 )
 
 class Category(models.Model):
@@ -18,7 +18,7 @@ class Category(models.Model):
 
 class Quiz(models.Model):
     """Represents a quiz under a category"""
-    name = models.CharField(max_length=200, default='New Quiz')
+    name = models.CharField(max_length=200, default='New Quiz') 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     topic = models.CharField(max_length=255, default='General')
     number_of_questions = models.IntegerField(default=10)
@@ -43,31 +43,32 @@ class Question(models.Model):
 """
 
 class Question(models.Model):
+    """Represents a single question in a quiz."""
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, related_name='questions', on_delete=models.SET_NULL, null=True)
-    text = models.CharField(max_length=255, default='Question')
-    option1 = models.CharField(max_length=255, default='')  # Provide a default value
-    option2 = models.CharField(max_length=255, default='')  # Provide default values
-    option3 = models.CharField(max_length=255, default='')  # Provide default values
-    option4 = models.CharField(max_length=255, default='')  # Provide default values
-    correct_option = models.CharField(max_length=255, default='')  # Set a sensible default
-
-    def __str__(self):
-        return str(self.text)
-
-    def get_choices(self):
-        """Get all choices related to the question"""
-        return self.choices.all()
-
-
-class Choice(models.Model):
-    """Represents a choice for a question"""
-    question = models.ForeignKey(Question, related_name='choices', on_delete=models.CASCADE)
-    text = models.CharField(max_length=255, default='Choice Text')
-    is_correct = models.BooleanField(default=False)
+    text = models.CharField(max_length=255)
+    option1 = models.CharField(max_length=255, default='Option 1')
+    option2 = models.CharField(max_length=255, default='Option 2')
+    option3 = models.CharField(max_length=255, default='Option 3')
+    option4 = models.CharField(max_length=255, default='Option 4')
+    correct_option = models.IntegerField(choices=[(1, 'Option 1'), (2, 'Option 2'), (3, 'Option 3'), (4, 'Option 4')], default=1)
 
     def __str__(self):
         return self.text
+
+    def get_options(self):
+        """Returns a list of all options."""
+        return [self.option1, self.option2, self.option3, self.option4]
+
+class UserAnswer(models.Model):
+    """Represents a user's answer to a specific question."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    selected_option = models.IntegerField(choices=[(1, 'Option 1'), (2, 'Option 2'), (3, 'Option 3'), (4, 'Option 4')])
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.question.text} - Option {self.selected_option}'
 
 
 class Result(models.Model):

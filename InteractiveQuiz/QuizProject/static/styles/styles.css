@@ -1,107 +1,96 @@
 
+/* Base Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #b0b5ef;
+    background-color: #f5f5f5; /* Light gray background */
+    color: #333; /* Dark gray text */
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 150vh;
 }
 
-.container {
-    background: #b2a8e2;
+h1, h2, h3, h4 {
+    color: #ff8c00; /* Orange color for headings */
+    margin-bottom: 0.5em;
+}
+
+a {
+    color: #ff8c00; /* Orange links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Container Styles */
+.quiz-container, .result-container, .quiz-list-container, .quiz-detail-container, .add-quiz-container, .add-question-container {
+    max-width: 800px;
+    margin: 20px auto;
     padding: 20px;
-    border-radius: 18px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* White background for containers */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.5s; /* Fade in effect */
 }
 
-h2 {
+/* Button Styles */
+.btn-submit, button {
+    background-color: #ff8c00; /* Orange background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; /* Motion effects */
+}
+
+.btn-submit:hover, button:hover {
+    background-color: #e07b00; /* Darker orange on hover */
+    transform: scale(1.05); /* Slight scale up effect */
+}
+
+/* Flexbox Styles */
+.quiz-details, .options {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 20px;
 }
 
-.form-group {
-    margin-bottom: 15px;
+.question {
+    border: 1px solid #ddd; /* Light gray border */
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: box-shadow 0.3s; /* Motion effect */
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+.question:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow on hover */
 }
 
-input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    object-position: 0cap;
+/* Animation Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-button {
-    background: #7ea7d3;
-    color: #260808;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-}
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+    .quiz-container, .result-container, .quiz-list-container, .quiz-detail-container, .add-quiz-container, .add-question-container {
+        padding: 15px;
+    }
 
-button:hover {
-    background: #0056b3;
-}
+    h1 {
+        font-size: 1.8em;
+    }
 
-.error {
-    color: red;
-    margin-top: 5px;
-}
-
-.parent {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Adjust as needed */
-}
-
-.container {
-    background-color: white; /* Optional: Background color to avoid overlap issues */
-    position: sticky;
-    top: 0;
-    z-index: 1000
-}
-
-.top-bar {
-    position: fixed; /* Fixes the bar to the top of the viewport */
-    top: 0;
-    left: 0;
-    width: 100%; /* Full width of the viewport */
-    background-color: #150444; /* Dark background for the bar */
-    color: white; /* Text color */
-    padding: 10px; /* Padding inside the bar */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Shadow for better visibility */
-    z-index: 1000; /* Ensures it stays above other content */
-    display: flexbox; /* Align items horizontally */
-    align-items: right; /* Center items vertically */
-    justify-content: space-between; /* Space out items */
-}
-
-/* Style for links and buttons within the top bar */
-.top-bar a {
-    color: white;
-    text-decoration: none;
-    margin: 0 10px; /* Space out links */
-}
-
-.top-bar button {
-    background-color: #555; /* Button background */
-    border: none; /* Remove default border */
-    color: white; /* Button text color */
-    padding: 10px 20px; /* Button padding */
-    cursor: pointer; /* Pointer cursor on hover */
-}
-
-/* Adjust content to avoid overlapping the top bar */
-.content {
-    margin-top: 80px; /* Adjust this value based on the height of the top bar */
-    padding: 20px; /* Padding for content */
+    h2 {
+        font-size: 1.5em;
+    }
 }

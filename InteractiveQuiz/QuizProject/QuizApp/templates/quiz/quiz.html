@@ -7,12 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ quiz.name }} - QuizApp</title>
     <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
-    <style>
-        /* Add your styles here */
-    </style>
 </head>
 <body>
-
 <div class="quiz-container">
     <h1>{{ quiz.name }}</h1>
 
@@ -23,26 +19,41 @@
         <p>Time Limit: {{ quiz.time }} minutes</p>
         <p>Difficulty: {{ quiz.difficulty|title }}</p>
     </div>
-
-    <!-- Quiz form -->
-    <form method="post">
-        {% csrf_token %}
-        {% for question in questions %}
-            <div class="question">
-                <h4>{{ question.text }}</h4>
-                {% for choice in question.choices.all %}  <!-- Use 'all' to get choices -->
-                    <div class="option">
-                        <input type="radio" id="q{{ question.id }}o{{ choice.id }}" name="question_{{ question.id }}" value="{{ choice.id }}">
-                        <label for="q{{ question.id }}o{{ choice.id }}">{{ choice.text }}</label>
+    <!-- In quiz.html -->
+<div class="quiz-questions">
+    {% if questions %}
+        <form method="POST">
+            {% csrf_token %}
+            <h2>Questions</h2>
+            {% for question in questions %}
+                <div class="question">
+                    <p><strong>{{ question.text }}</strong></p>
+                    <div class="options">
+                        <label>
+                            <input type="radio" name="question_{{ question.id }}" value="1">
+                            {{ question.option1 }}
+                        </label>
+                        <label>
+                            <input type="radio" name="question_{{ question.id }}" value="2">
+                            {{ question.option2 }}
+                        </label>
+                        <label>
+                            <input type="radio" name="question_{{ question.id }}" value="3">
+                            {{ question.option3 }}
+                        </label>
+                        <label>
+                            <input type="radio" name="question_{{ question.id }}" value="4">
+                            {{ question.option4 }}
+                        </label>
                     </div>
-                {% empty %}
-                    <p>No options available for this question.</p>  <!-- Fallback message -->
-                {% endfor %}
-            </div>
-        {% endfor %}
-        <button type="submit" class="submit-btn">Submit Answers</button>
-    </form>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn-submit">Submit Quiz</button>
+        </form>
+    {% else %}
+        <p>No questions available for this category. Please select a different category.</p>
+    {% endif %}
+    </div>
 </div>
-
 </body>
 </html>

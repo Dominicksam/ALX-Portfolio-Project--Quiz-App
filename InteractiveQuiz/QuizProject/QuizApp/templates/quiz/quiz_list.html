@@ -1,29 +1,41 @@
-<h1>Available Quizzes</h1>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Quizzes - QuizApp</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="quiz-list-container">
+        <h1>Available Quizzes</h1>
 
-<!-- Filter by category -->
-<form method="get">
-    <select name="category">
-        <option value="">All Categories</option>
-        {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.name }}</option>
-        {% endfor %}
-    </select>
-    <button type="submit">Take Qu</button>
-</form>
+        <div class="category-filter">
+            <h3>Filter by Category:</h3>
+            <form method="GET">
+                <select name="category" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
 
-<!-- Display quizzes based on selected category -->
-<ul>
-    {% if quizzes %}
-        {% for quiz in quizzes %}
-            <li>
-                <a href="{% url 'quiz_view' quiz.id %}">{{ quiz.name }}</a> 
-                ({{ quiz.number_of_questions }} Questions, {{ quiz.difficulty|title }} Difficulty)
-            </li>
-        {% endfor %}
-    {% else %}
-        <li>No quizzes available for this category.</li>
-    {% endif %}
-</ul>
+        <ul>
+            {% for quiz in quizzes %}
+                <li>
+                    <a href="{% url 'quiz_view' quiz.id %}">{{ quiz.name }}</a>
+                    <p>Category: {{ quiz.category.name }}</p>
+                    <p>Difficulty: {{ quiz.difficulty|title }}</p>
+                </li>
+            {% empty %}
+                <li>No quizzes available.</li>
+            {% endfor %}
+        </ul>
 
-<!-- Link to add a new quiz -->
-<a href="{% url 'add_quiz' %}">Add a new quiz</a>
+        <a href="{% url 'add_quiz' %}">Add New Quiz</a>
+    </div>
+</body>
+</html>

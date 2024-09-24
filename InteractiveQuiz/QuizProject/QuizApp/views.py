@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.views.generic import TemplateView
 from .forms import RegisterForm, QuizForm, QuestionForm
-from .models import Question, Category, Result, Quiz
+from .models import Question, Category, Result, Quiz, UserAnswer
+from .utils import calculate_score
 
 # User Registration
 def register_view(request):
@@ -45,59 +46,19 @@ def logout_view(request):
     return redirect('home')
 
 # Home View with Category Selection
-@login_required 
+@login_required
 def home_view(request):
-    category_name = request.GET.get('category')
+    category_id = request.GET.get('category')
     categories = Category.objects.all()
-    questions = []
+    quizzes = Quiz.objects.all()
 
-    if category_name:
-        category = get_object_or_404(Category, id=category_name)
-        questions = Question.objects.filter(category=category)
+    if category_id:
+        quizzes = quizzes.filter(category_id=category_id)
 
     return render(request, 'accounts/home.html', {
         'categories': categories,
-        'questions': questions
+        'quizzes': quizzes
     })
-
-# List available quizzes by category
-@login_required
-def quiz_list_view(request):
-    category_name = request.GET.get('category')
-    quizzes = Quiz.objects.filter(category__name=category_name) if category_name else Quiz.objects.all()
-    categories = Category.objects.all()
-    return render(request, 'quiz/quiz.html', {'quizzes': quizzes, 'categories': categories})
-
-# Display a quiz and handle submission
-@login_required
-def quiz_view(request, quiz_id):
-    quiz = get_object_or_404(Quiz, id=quiz_id)
-    questions = Question.objects.filter(quiz=quiz).prefetch_related('choices')
-    
-    if request.method == 'POST':
-        score = 0
-        user_answers = request.POST  # Capture all user answers from POST data
-
-        for question in questions:
-            selected_option = request.POST.get(f'question_{question.id}')
-            correct_choice = question.choices.filter(is_correct=True).first()
-
-            if correct_choice:  # Check if there's a correct choice
-                if selected_option == str(correct_choice.id):
-                    score += 1
-
-        # Save the result in the Result model
-        Result.objects.create(user=request.user, quiz=quiz, score=score)
-
-        # Pass the quiz, questions, score, and user answers to the result template
-        return render(request, 'quiz/result.html', {
-            'quiz': quiz,
-            'questions': questions,
-            'score': score,
-            'user_answers': user_answers,
-        })
-
-    return render(request, 'quiz/quiz.html', {'quiz': quiz, 'questions': questions})
 
 # View Quiz Details (for adding questions, etc.)
 @login_required
@@ -139,8 +100,84 @@ def user_scores_view(request):
     scores = Result.objects.filter(user=request.user)
     return render(request, 'quiz/user_scores.html', {'scores': scores})
 
+# Protected Page
 class ProtectedView(TemplateView):
     template_name = 'accounts/protected.html'
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+# Main Quiz View
+@login_required
+def quiz_view(request, quiz_id):
+    # Get the quiz object
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    
+    # Get the list of questions associated with the quiz
+    questions = quiz.get_questions()  # Returns a queryset
+
+    print(f"User type: {type(request.user)}")
+    print(f"Questions type: {type(questions)}")
+
+    if request.method == 'POST':
+        user_answers = {}  # This will store user's answers as {question.id: selected_option}
+
+        # Loop through each question to get the user's selected option
+        for question in questions:
+            selected_option = request.POST.get(f'question_{question.id}')
+            if selected_option:
+                user_answers[question.id] = int(selected_option)  # Ensure this is stored as an integer
+
+                # Save the user's answer to the database
+                UserAnswer.objects.create(
+                    user=request.user,  # This should be the logged-in user
+                    question=question,
+                    selected_option=selected_option,
+                    quiz=quiz
+                )
+
+        print(f"User Answers: {user_answers}")
+
+        # Here we check if request.user exists
+        if not hasattr(request, 'user'):
+            raise AttributeError("Request object has no user attribute")
+
+        # Calculate the score by comparing correct answers with user's answers
+        score = calculate_score(questions, user_answers)
+
+        # Save the result to the database
+        Result.objects.create(user=request.user, quiz=quiz, score=score)
+
+        # Render the result page, passing the quiz, score, questions, and user's answers
+        return render(request, 'quiz/result.html', {
+            'quiz': quiz,
+            'score': score,
+            'questions': questions,
+            'user_answers': user_answers,
+        })
+
+    # If it's a GET request, show the quiz form
+    return render(request, 'quiz/quiz.html', {
+        'quiz': quiz,
+        'questions': questions,
+    })
+
+def calculate_score(questions, user_answers):
+    correct_answers = 0
+
+    for question in questions:
+        correct_option = question.correct_option  # The correct answer stored in the DB
+        user_option = user_answers.get(question.id)  # The user's selected answer
+
+        # Check if the user answer is correct
+        if user_option is not None and user_option == correct_option:
+            correct_answers += 1
+
+    return correct_answers
+
+
+# Quiz List View
+@login_required
+def quiz_list_view(request):
+    quizzes = Quiz.objects.all()
+    return render(request, 'quiz/quiz_list.html', {'quizzes': quizzes})

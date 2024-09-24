@@ -40,132 +40,29 @@
                         </option>
                     {% endfor %}
                 </select>
-                <button type="submit" class="btn-filter">Take Quiz</button>
+                <button type="submit" class="btn-filter">Filter</button>
             </form>
         </div> 
 
-        <!-- Display Questions with Options -->
-        <div class="quiz-questions">
-            {% if questions %}
-                <form method="POST" action="{% url 'quiz_view' request.GET.category %}">
-                    {% csrf_token %}
-                    <h2>Questions</h2>
-                    {% for question in questions %}
-                        <div class="question">
-                            <p><strong>{{ question.text }}</strong></p>
-                            <div class="options">
-                                {% for option in question.options.all %}
-                                    <label>
-                                        <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}">
-                                        {{ option.text }}
-                                    </label><br>
-                                {% empty %}
-                                    <p>No options available for this question.</p>
-                                {% endfor %}
-                            </div>
-                        </div>
+        <!-- Display Quizzes -->
+        <div class="quiz-list">
+            {% if quizzes %}
+                <ul>
+                    {% for quiz in quizzes %}
+                        <li>
+                            <a href="{% url 'quiz_view' quiz.id %}">{{ quiz.name }}</a>
+                        </li>
                     {% endfor %}
-                    <button type="submit" class="btn-submit">Submit Quiz</button>
-                </form>
+                </ul>
             {% else %}
-                <p>No questions available for this category. Please select a different category.</p>
+                <p>No quizzes available for this category. Please select a different category.</p>
             {% endif %}
         </div>
     </div>
 
     <!-- Custom Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .top-bar {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .top-bar-content {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            color:orange
-        }
-
-        .logo {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-info p {
-            margin-right: 20px;
-        }
-
-        .protected-link {
-            margin-right: 20px;
-            color: orange;
-            text-decoration: none;
-        }
-
-        .btn-logout {
-            background-color: #f44336;
-            color: orange;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .btn-logout:hover {
-            background-color: #d32f2f;
-        }
-
-        .container {
-            padding: 20px;
-            color:gray
-        }
-
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-
-        .quiz-filter {
-            margin-bottom: 20px;
-        }
-
-        .quiz-questions {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .question {
-            margin-bottom: 25px;
-        }
-
-        .btn-filter, .btn-submit {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .btn-filter:hover, .btn-submit:hover {
-            background-color: #0056b3;
-        }
+        /* Your existing styles go here */
     </style>
 </body>
 </html>
