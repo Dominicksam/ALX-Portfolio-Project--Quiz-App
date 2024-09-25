@@ -109,15 +109,13 @@ class ProtectedView(TemplateView):
 
 # Main Quiz View
 @login_required
+@login_required
 def quiz_view(request, quiz_id):
     # Get the quiz object
     quiz = get_object_or_404(Quiz, id=quiz_id)
     
     # Get the list of questions associated with the quiz
     questions = quiz.get_questions()  # Returns a queryset
-
-    print(f"User type: {type(request.user)}")
-    print(f"Questions type: {type(questions)}")
 
     if request.method == 'POST':
         user_answers = {}  # This will store user's answers as {question.id: selected_option}
@@ -136,17 +134,14 @@ def quiz_view(request, quiz_id):
                     quiz=quiz
                 )
 
-        print(f"User Answers: {user_answers}")
-
-        # Here we check if request.user exists
-        if not hasattr(request, 'user'):
-            raise AttributeError("Request object has no user attribute")
-
         # Calculate the score by comparing correct answers with user's answers
         score = calculate_score(questions, user_answers)
-
+        
         # Save the result to the database
         Result.objects.create(user=request.user, quiz=quiz, score=score)
+
+        # Get the user's previous quiz results
+        previous_results = Result.objects.filter(user=request.user).order_by('-date_taken')
 
         # Render the result page, passing the quiz, score, questions, and user's answers
         return render(request, 'quiz/result.html', {
@@ -154,6 +149,7 @@ def quiz_view(request, quiz_id):
             'score': score,
             'questions': questions,
             'user_answers': user_answers,
+            'previous_results': previous_results
         })
 
     # If it's a GET request, show the quiz form
@@ -161,7 +157,7 @@ def quiz_view(request, quiz_id):
         'quiz': quiz,
         'questions': questions,
     })
-
+    
 def calculate_score(questions, user_answers):
     correct_answers = 0
 
@@ -181,3 +177,29 @@ def calculate_score(questions, user_answers):
 def quiz_list_view(request):
     quizzes = Quiz.objects.all()
     return render(request, 'quiz/quiz_list.html', {'quizzes': quizzes})
+
+
+
+def save_quiz_result(user, quiz, score):
+    """
+    Saves the result of the quiz for the given user.
+    
+    :param user: The user who took the quiz (instance of Django's User model).
+    :param quiz: The quiz that was taken (instance of the Quiz model).
+    :param score: The score that the user achieved.
+    """
+    # Create a new Result instance
+    result = Result(user=user, quiz=quiz, score=score)
+    
+    # Save the result to the database
+    result.save()
+
+    print(f"Quiz result saved for {user.username}. Score: {score}")
+    
+    
+@login_required
+def user_quiz_history(request):
+    # Get the logged-in user's previous quiz results
+    previous_results = Result.objects.filter(user=request.user)
+
+    return render(request, 'quiz_history.html', {'results': previous_results})

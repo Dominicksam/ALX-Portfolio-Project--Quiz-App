@@ -7,20 +7,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - QuizApp</title>
     <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
+    <style>
+        /* General Styling */
+        body {
+            background-color: #1e1e1e; /* Dark gray background */
+            color: #f0f0f0; /* White text */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        .top-bar {
+            background-color: #333; /* Darker gray */
+            color: #f0f0f0;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar .logo {
+            font-size: 24px;
+            color: #f0f0f0;
+        }
+
+        .top-bar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar .user-info p {
+            margin: 0;
+        }
+
+        .top-bar a, .top-bar button {
+            background-color: #ff6600; /* Orange button */
+            color: #f0f0f0;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .top-bar a:hover, .top-bar button:hover {
+            background-color: #ff5500; /* Darker orange on hover */
+        }
+
+        /* Main Content */
+        .container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .container h1 {
+            color: #ff6600;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Quiz Filter Section */
+        .quiz-filter {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .quiz-filter label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .quiz-filter .category-dropdown, .quiz-filter .btn-filter {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .quiz-filter .category-dropdown {
+            background-color: #333;
+            color: #f0f0f0;
+            margin-right: 10px;
+        }
+
+        .quiz-filter .btn-filter {
+            background-color: #ff6600;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .quiz-filter .btn-filter:hover {
+            background-color: #ff5500;
+        }
+
+        /* Quiz List */
+        .quiz-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quiz-list li {
+            background-color: #2a2a2a;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .quiz-list li:hover {
+            background-color: #333;
+        }
+
+        .quiz-list a {
+            text-decoration: none;
+            color: #f0f0f0;
+            font-size: 20px;
+        }
+
+        .quiz-list a:hover {
+            color: #ff6600;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .container h1 {
+                font-size: 28px;
+            }
+
+            .quiz-filter label, .quiz-filter select, .quiz-filter button {
+                display: block;
+                margin: 10px 0;
+            }
+
+            .quiz-list li {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Top Navigation Bar -->
     <div class="top-bar">
-        <div class="top-bar-content">
-            <h2 class="logo">QuizApp</h2>
-            <div class="user-info">
+        <h2 class="logo">QuizApp</h2>
+        <div class="user-info">
+            {% if request.user.is_authenticated %}
                 <p>Welcome, {{ request.user.username }}!</p>
-                <a href="{% url 'protected' %}" class="protected-link">Protected Page</a>
                 <form action="{% url 'logout' %}" method="POST" class="logout-form">
                     {% csrf_token %}
-                    <button type="submit" class="btn-logout">Logout</button>
+                    <button type="submit">Logout</button>
                 </form>
-            </div>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
         </div>
     </div>
 
@@ -59,10 +212,5 @@
             {% endif %}
         </div>
     </div>
-
-    <!-- Custom Styles -->
-    <style>
-        /* Your existing styles go here */
-    </style>
 </body>
 </html>

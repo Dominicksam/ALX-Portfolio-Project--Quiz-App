@@ -9,14 +9,67 @@
     <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
 </head>
 <body>
+    <!-- Navigation Bar -->
     <div class="top-bar">
+        <div class="top-bar-content">
+            <h2 class="logo">QuizApp</h2>
+            <div class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'quiz_list' %}">Quizzes</a>
+                <a href="{% url 'login' %}">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation -->
+    <div class="container">
         <h2>Logout</h2>
         <p>Are you sure you want to logout?</p>
         <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button type="submit">Logout</button>
-            <a href="{% url 'home' %}">Cancel</a>
+            <button type="submit" class="btn-logout">Logout</button>
+            <a href="{% url 'home' %}" class="btn-cancel">Cancel</a>
         </form>
     </div>
+
+    <style>
+        body {
+            background-color: #333;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .top-bar {
+            background-color: #222;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: orange;
+            font-size: 24px;
+        }
+        .nav-links a {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+        }
+        .container {
+            padding: 40px;
+            text-align: center;
+        }
+        .btn-logout, .btn-cancel {
+            background-color: orange;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn-cancel {
+            background-color: grey;
+            text-decoration: none;
+        }
+    </style>
 </body>
-</html> 
+</html>

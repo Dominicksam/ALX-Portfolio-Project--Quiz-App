@@ -13,3 +13,7 @@ register = template.Library()
 @register.filter(name='dict_get')
 def dict_get(dictionary, key):
     return dictionary.get(key)
+
+@register.filter
+def dict_get(d, key):
+    return d.get(key, None)

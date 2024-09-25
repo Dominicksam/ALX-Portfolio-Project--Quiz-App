@@ -1,13 +1,101 @@
-{% load static %}  
-<!DOCTYPE html>  
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Login</title> 
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">  
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
+    <style>
+        body {
+            background-color: #2c2c2c; /* Dark gray background */
+            color: #ffffff; /* White text */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 400px; /* Fixed width for container */
+            margin: 100px auto; /* Centered */
+            background-color: #3c3c3c; /* Slightly lighter gray for the container */
+            padding: 20px;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+        }
+
+        h2 {
+            text-align: center;
+            color: #ff9800; /* Orange color for the header */
+        }
+
+        .description {
+            text-align: center; /* Centered description */
+            margin-bottom: 20px; /* Space below description */
+            font-size: 14px; /* Smaller font size for description */
+            color: #e0e0e0; /* Lighter gray for description text */
+        }
+
+        .form-group {
+            margin-bottom: 15px; /* Space between form fields */
+        }
+
+        label {
+            display: block; /* Label on its own line */
+            margin-bottom: 5px; /* Space below labels */
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%; /* Full width for inputs */
+            padding: 10px; /* Padding inside input fields */
+            border: 1px solid #ff9800; /* Orange border */
+            border-radius: 4px; /* Rounded corners */
+            background-color: #4c4c4c; /* Input background */
+            color: #ffffff; /* Input text color */
+        }
+
+        button {
+            width: 100%; /* Full width for button */
+            padding: 10px; /* Padding inside button */
+            border: none; /* No border */
+            border-radius: 4px; /* Rounded corners */
+            background-color: #ff9800; /* Orange background for button */
+            color: #ffffff; /* White text on button */
+            font-size: 16px; /* Font size for button text */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        button:hover {
+            background-color: #e68a00; /* Darker orange on hover */
+        }
+
+        .error {
+            color: #ff0000; /* Red color for error messages */
+            text-align: center; /* Centered error message */
+            margin-top: 10px; /* Space above error message */
+        }
+
+        p {
+            text-align: center; /* Centered text */
+            margin-top: 15px; /* Space above paragraphs */
+        }
+
+        a {
+            color: #ff9800; /* Orange color for links */
+            text-decoration: none; /* No underline on links */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
 </head>
 <body>
     <div class="container"> 
-        <h2>Login</h2>  
+        <h2>QuizApp Login</h2>  
+        <p class="description">Welcome to QuizApp, a dynamic testing platform where you can assess your knowledge through a variety of quizzes across different subjects. Log in to access your quizzes, track your progress, and improve your skills!</p>
         <form method="post" action="{% url 'login' %}"> 
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}"> 
