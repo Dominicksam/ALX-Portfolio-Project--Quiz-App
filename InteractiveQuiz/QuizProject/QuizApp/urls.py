@@ -1,6 +1,19 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import (
+    register_view,
+    login_view,
+    logout_view,
+    home_view,
+    quiz_detail_view,
+    add_quiz_view,
+    add_question_view,
+    user_scores_view,
+    user_quiz_history,  # Make sure this line exists
+    quiz_view,
+    quiz_list_view,
+)
 
 urlpatterns = [
     # Home page
@@ -21,4 +34,5 @@ urlpatterns = [
 
     # User scores route
     path('user/scores/', views.user_scores_view, name='user_scores'),  # View user's quiz scores
+    path('quiz/history/', user_quiz_history, name='quiz_history'),
 ]

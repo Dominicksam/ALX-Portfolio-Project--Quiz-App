@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 from .forms import RegisterForm, QuizForm, QuestionForm
 from .models import Question, Category, Result, Quiz, UserAnswer
-from .utils import calculate_score
 
 # User Registration
 def register_view(request):
@@ -109,7 +108,6 @@ class ProtectedView(TemplateView):
 
 # Main Quiz View
 @login_required
-@login_required
 def quiz_view(request, quiz_id):
     # Get the quiz object
     quiz = get_object_or_404(Quiz, id=quiz_id)
@@ -140,16 +138,13 @@ def quiz_view(request, quiz_id):
         # Save the result to the database
         Result.objects.create(user=request.user, quiz=quiz, score=score)
 
-        # Get the user's previous quiz results
-        previous_results = Result.objects.filter(user=request.user).order_by('-date_taken')
-
-        # Render the result page, passing the quiz, score, questions, and user's answers
+        # Render the result page, passing the quiz, score, questions, user answers, and correct answers
         return render(request, 'quiz/result.html', {
             'quiz': quiz,
             'score': score,
             'questions': questions,
             'user_answers': user_answers,
-            'previous_results': previous_results
+            'correct_answers': {question.id: question.correct_option for question in questions},  # Include correct answers
         })
 
     # If it's a GET request, show the quiz form
@@ -171,35 +166,27 @@ def calculate_score(questions, user_answers):
 
     return correct_answers
 
-
 # Quiz List View
 @login_required
 def quiz_list_view(request):
     quizzes = Quiz.objects.all()
     return render(request, 'quiz/quiz_list.html', {'quizzes': quizzes})
 
-
-
-def save_quiz_result(user, quiz, score):
-    """
-    Saves the result of the quiz for the given user.
-    
-    :param user: The user who took the quiz (instance of Django's User model).
-    :param quiz: The quiz that was taken (instance of the Quiz model).
-    :param score: The score that the user achieved.
-    """
-    # Create a new Result instance
-    result = Result(user=user, quiz=quiz, score=score)
-    
-    # Save the result to the database
-    result.save()
-
-    print(f"Quiz result saved for {user.username}. Score: {score}")
-    
-    
+# User Quiz History
 @login_required
 def user_quiz_history(request):
     # Get the logged-in user's previous quiz results
-    previous_results = Result.objects.filter(user=request.user)
+    previous_results = Result.objects.filter(user=request.user).order_by('-date_taken')
+    
+    # Create a list to hold the result data with user answers
+    history_with_answers = []
 
-    return render(request, 'quiz_history.html', {'results': previous_results})
+    for result in previous_results:
+        user_answers = UserAnswer.objects.filter(user=result.user, quiz=result.quiz)
+        history_with_answers.append({
+            'result': result,
+            'user_answers': user_answers
+        })
+
+    return render(request, 'quiz/quiz_history.html', {'history': history_with_answers})
+

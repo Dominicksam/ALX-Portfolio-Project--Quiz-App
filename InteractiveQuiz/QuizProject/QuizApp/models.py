@@ -84,4 +84,3 @@ class Result(models.Model):
     def passed(self):
         """Check if the user passed the quiz based on the required score"""
         return self.score >= self.quiz.required_score_to_pass
-

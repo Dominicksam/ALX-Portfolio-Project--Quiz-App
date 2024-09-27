@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz History</title>
+    <a href="{% url 'home' %}" class="back-link">Back to Home page</a>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1e1e1e; /* Dark gray background */
+            color: #f0f0f0; /* White text */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #333; /* Darker gray background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6600; /* Orange text for the heading */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444; /* Slightly lighter gray */
+            color: #f0f0f0; /* White text */
+        }
+
+        th {
+            background-color: #444; /* Dark gray for table headers */
+        }
+
+        tr {
+            background-color: #2a2a2a; /* Darker gray for table rows */
+        }
+
+        tr:hover {
+            background-color: #333; /* Lighter gray on hover */
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        /* Links and Buttons */
+        .back-link {
+            display: inline-block;
+            background-color: #ff6600; /* Orange background */
+            color: #f0f0f0;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background-color: #ff5500; /* Slightly darker orange on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz History</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Quiz Name</th>
+                    <th>Score</th>
+                    <th>Date Taken</th>
+                    <th>Your Answers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                <tr>
+                    <td>{{ item.result.quiz.name }}</td>
+                    <td>{{ item.result.score }}</td>
+                    <td>{{ item.result.date_taken }}</td>
+                    <td>
+                        <ul>
+                            {% for answer in item.user_answers %}
+                            <li>{{ answer.question.text }}: {{ answer.answer }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No quiz history available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

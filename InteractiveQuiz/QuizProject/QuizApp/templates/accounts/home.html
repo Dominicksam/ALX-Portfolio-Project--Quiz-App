@@ -166,6 +166,7 @@
         <div class="user-info">
             {% if request.user.is_authenticated %}
                 <p>Welcome, {{ request.user.username }}!</p>
+                <a href="{% url 'quiz_history' %}">Quiz History</a> <!-- Link to history page -->
                 <form action="{% url 'logout' %}" method="POST" class="logout-form">
                     {% csrf_token %}
                     <button type="submit">Logout</button>

@@ -1,5 +1,6 @@
 {% load static %}
 {% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,22 +14,125 @@
         <h1>{{ quiz.name }} - Results</h1>
         <p>Your Score: {{ score }} out of {{ questions.count }}</p>
 
-        <h2>Details:</h2>
-        <ul>
-            {% for question in questions %}
-            <li>
-                <strong>{{ question.text }}</strong><br>
-                Your Answer: 
-                {% if user_answers|dict_get:question.id %}
-                {{ user_answers|dict_get:question.id }}
-                {% else %}
-                No answer submitted.
-                {% endif %}   
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="result-details">
+            <h2>Details:</h2>
+            <ul>
+                {% for question in questions %}
+                <li>
+                    <div class="question-block">
+                        <strong>{{ question.text }}</strong><br>
+                        Your Answer: 
+                        {% if user_answers|get_item:question.id %}
+                        <span class="{% if user_answers|get_item:question.id == question.correct_option %}correct{% else %}incorrect{% endif %}">
+                            Option {{ user_answers|get_item:question.id }}
+                        </span><br>
+                        Correct Answer: 
+                        <span class="correct-answer">
+                            Option {{ question.correct_option }}
+                        </span>
+                        {% else %}
+                        No answer submitted.
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-        <a href="{% url 'quiz_list' %}">Back to Quiz List</a>
+        <a href="{% url 'home' %}" class="back-link">Back to Home page</a>
+        <a href="{% url 'quiz_history' %}">Quiz History</a>
     </div>
 </body>
 </html>
+<style>
+    /* Your existing CSS styles */
+    body {
+        background-color: #f8f8f8; /* light gray background */
+        color: #333;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .result-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 10px;
+        text-align: center;
+        background-color: #ffffff; /* white background */
+        border: 1px solid #ddd;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+    
+    p {
+        font-size: 18px;
+        margin: 5px 0;
+        color: #666;
+    }
+    
+    .result-details ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    .result-details li {
+        background-color: #f5f5f5; /* gray background for question blocks */
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        text-align: left;
+    }
+    
+    .question-block {
+        margin-bottom: 5px;
+    }
+    
+    .correct {
+        color: #28a745; /* green for correct answers */
+    }
+    
+    .incorrect {
+        color: #dc3545; /* red for incorrect answers */
+    }
+    
+    .correct-answer {
+        color: #f39c12; /* orange for correct answer review */
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #f39c12; /* orange background */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    
+    .back-link:hover {
+        background-color: #e67e22; /* darker orange on hover */
+    }
+    
+    /* Ensure everything fits on one page */
+    html, body {
+        height: 100%;
+    }
+    
+    .result-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .result-details {
+        overflow-y: auto;
+    }    
+</style>
