@@ -32,6 +32,14 @@ After login, users can select quizzes based on different categories. Quizzes are
 
 After submitting a quiz, users receive their scores immediately, with detailed feedback. The quiz history is available through a dropdown button on the result page. App Structure Authentication: Manages user registration, login, and logout. Quiz: Manages quiz categories, questions, and quiz-taking logic. Results: Handles the display of scores and feedback after quiz completion. Quiz History: Displays the user's past quizzes and scores.
 
+SCREENSHOT
+![Screenshot (221)](https://github.com/user-attachments/assets/e585f76c-d532-4f00-a642-1c7a10e50be8)
+![Screenshot (221)](https://github.com/user-attachments/assets/6edead00-e554-4e45-b865-aac7048229de)
+![Screenshot (219)](https://github.com/user-attachments/assets/76a708f1-8275-4cad-a78c-58ae9a2a8138)
+
+
+
+
 
 
 License This project is licensed under the MIT License. See the LICENSE file for more details.
