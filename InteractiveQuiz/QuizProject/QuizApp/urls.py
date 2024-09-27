@@ -10,7 +10,7 @@ from .views import (
     add_quiz_view,
     add_question_view,
     user_scores_view,
-    user_quiz_history,  # Make sure this line exists
+    user_quiz_history,  
     quiz_view,
     quiz_list_view,
 )
