@@ -1,23 +1,31 @@
-QuizApp QuizApp is a dynamic quiz application built using Django. It allows users to take quizzes in various categories, tracks their scores, and provides detailed results. The app supports user registration, login, logout, and quiz history tracking.
+**QuizApp **
+QuizApp is a dynamic quiz application built using Django. It allows users to take quizzes in various categories, tracks their scores, and provides detailed results. The app supports user registration, login, logout, and quiz history tracking.
 
-Features User Authentication: Register, login, and logout functionality with CSRF protection.
+**Features **
+**User Authentication**: Register, login, and logout functionality with CSRF protection.
 
-Quiz System: Quizzes are categorized for better organization. Questions are dynamically generated, and all questions are presented on a single page.
+**Quiz System:** Quizzes are categorized for better organization. Questions are dynamically generated, and all questions are presented on a single page.
 
-Scoring & Results: Users can submit their answers and receive their scores immediately. Detailed feedback on the submitted answers, showing the correct answers and user responses.
+**Scoring & Results**: Users can submit their answers and receive their scores immediately. Detailed feedback on the submitted answers, showing the correct answers and user responses.
 
-Quiz History: Users can view their quiz history, tracking their past performance.
+**Quiz History:** Users can view their quiz history, tracking their past performance.
 
-Installation Prerequisites Before you begin, ensure you have the following installed:
+**Installation Prerequisites **
+Before you begin, ensure you have the following installed:
 
-Python 3.10+ Django 4.1.1 A virtual environment tool (e.g., virtualenv or venv)
+Python 3.10+ 
+Django 4.1.1 
+A virtual environment tool (e.g., virtualenv or venv)
 
-Steps Clone the repository: https://github.com/Dominicksam/ALX-Portfolio-Project--Quiz-App
-
+**Steps**
+Clone the repository: https://github.com/Dominicksam/ALX-Portfolio-Project--Quiz-App
 cd QuizApp Create and activate a virtual environment:
-
-bash Copy code python -m venv env source env/bin/activate # On Windows use env\Scripts\activate Install the required packages: pip install -r requirements.txt Run migrations to set up the database: python manage.py migrate Create a superuser to access the Django admin: python manage.py createsuperuser Run the development server:
-
+run python -m venv env source env/bin/activate # On Windows 
+use env\Scripts\activate Install the required packages: 
+pip install -r requirements.txt 
+Run migrations to set up the database: 
+python manage.py migrate Create a superuser to access the Django admin: 
+python manage.py createsuperuser Run the development server:
 python manage.py runserver Access the application:
 
 Open your browser and go to http://127.0.0.1:8000/.
@@ -34,7 +42,6 @@ After submitting a quiz, users receive their scores immediately, with detailed f
 
 SCREENSHOT
 ![Screenshot (221)](https://github.com/user-attachments/assets/e585f76c-d532-4f00-a642-1c7a10e50be8)
-![Screenshot (221)](https://github.com/user-attachments/assets/6edead00-e554-4e45-b865-aac7048229de)
 ![Screenshot (219)](https://github.com/user-attachments/assets/76a708f1-8275-4cad-a78c-58ae9a2a8138)
 
 
