@@ -4,18 +4,26 @@ QuizApp is a dynamic quiz application built using Django. It allows users to tak
 **Features **
 **User Authentication**: Register, login, and logout functionality with CSRF protection.
 
+
 **Quiz System:** Quizzes are categorized for better organization. Questions are dynamically generated, and all questions are presented on a single page.
+
 
 **Scoring & Results**: Users can submit their answers and receive their scores immediately. Detailed feedback on the submitted answers, showing the correct answers and user responses.
 
+
 **Quiz History:** Users can view their quiz history, tracking their past performance.
+
 
 **Installation Prerequisites **
 Before you begin, ensure you have the following installed:
 
 Python 3.10+ 
+
 Django 4.1.1 
+
 A virtual environment tool (e.g., virtualenv or venv)
+
+
 
 **Steps**
 Clone the repository: https://github.com/Dominicksam/ALX-Portfolio-Project--Quiz-App
@@ -42,7 +50,12 @@ After submitting a quiz, users receive their scores immediately, with detailed f
 
 SCREENSHOT
 ![Screenshot (221)](https://github.com/user-attachments/assets/e585f76c-d532-4f00-a642-1c7a10e50be8)
+![Screenshot (220)](https://github.com/user-attachments/assets/be4fa091-2d78-4f45-baf0-fa9b21a83d39)
+
 ![Screenshot (219)](https://github.com/user-attachments/assets/76a708f1-8275-4cad-a78c-58ae9a2a8138)
+![Screenshot (222)](https://github.com/user-attachments/assets/083f35c4-a0ad-43e9-a49c-606b72ba5b40)
+![Screenshot (226)](https://github.com/user-attachments/assets/091aa2fb-f9df-4eb9-99ac-8070a4102838)
+
 
 
 
