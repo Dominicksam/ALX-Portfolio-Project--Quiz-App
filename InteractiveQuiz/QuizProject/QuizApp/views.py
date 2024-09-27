@@ -189,4 +189,3 @@ def user_quiz_history(request):
         })
 
     return render(request, 'quiz/quiz_history.html', {'history': history_with_answers})
-
