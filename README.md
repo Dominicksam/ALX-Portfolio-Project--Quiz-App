@@ -1,7 +1,9 @@
-**QuizApp **
+**QuizApp** 
+
 QuizApp is a dynamic quiz application built using Django. It allows users to take quizzes in various categories, tracks their scores, and provides detailed results. The app supports user registration, login, logout, and quiz history tracking.
 
-**Features **
+**Features** 
+
 **User Authentication**: Register, login, and logout functionality with CSRF protection.
 
 
